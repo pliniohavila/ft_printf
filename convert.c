@@ -26,7 +26,9 @@ int     convert_base_str(int nbr, int base)
     int             r;
 
     len = count_digits_in_base(nbr, base) + 1;
-    converted = (char*)malloc(sizeof(char) * len); 
+    converted = (char*)malloc(sizeof(char) * len + 1); 
+    if (!converted)
+        return (-1);
     if (nbr < 0) 
     {
         converted[0] = '-';
@@ -39,7 +41,7 @@ int     convert_base_str(int nbr, int base)
     r = len;
     converted[len--] = '\0';
     if (nbr == 0)
-        converted[len] = '0';
+        converted[len--] = '0';
     while (nbr != 0)
     {
         converted[len--] = digits[(nbr % base)];
