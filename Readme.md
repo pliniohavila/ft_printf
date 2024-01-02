@@ -1,5 +1,7 @@
 # A homemade version of the `printf` function 
 
+
+
 # Study Road
 [x] Review  https://medium.com/@HackerSa3edy/printf-the-art-of-crafting-a-custom-function-in-c-programming-a3e3ec06bdb8
 [x] Study  Actual `printf` function code
@@ -13,10 +15,9 @@
 [ ] Study the `get_op_func` in https://github.com/Tahani-Saber/printf/blob/master/_printf.c
 
 # Prev
-Undestand va_arg, va_copy, va_end, va_start macros: maybe write about it 
-Undestand data conversiont to str: maybe write about it
-Maybe write about table dispatch in C language
-Maybe write about dispatch table 
+[ ] Study and write about hash tables in C language
+[ ] Study and write about table dispatch in C language
+[ ] Undestand va_arg, va_copy, va_end, va_start macros: maybe write about it 
 
 # Implementation road
 

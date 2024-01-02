@@ -1,12 +1,14 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 
-int main(int argc, char **argv)
+int main(void) 
 {
-   char     *buffer;
-   
-   buffer = malloc(1024);
-   sprintf(buffer, "%s", argv[1]);
-   printf("%s\n", buffer);
+   char     str[2];
+
+   str[0] = 'O';
+   str[1] = 'l';
+   str[2] = 'a';
+   str[3] = '\0';
+   printf("%s\n", str);
    return (0);
 }
