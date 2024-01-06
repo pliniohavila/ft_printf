@@ -1,4 +1,4 @@
-# Um versão artesenal da função `printf`
+# Um versão artesanal da função `printf`
 
 
 Dispenso a escrita
