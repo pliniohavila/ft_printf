@@ -13,17 +13,18 @@ int     print_int(int);  // OK
 int     print_char(char); // OK
 int     print_str(const char*); // OK 
 int     print_float(float); // OK 
-int     print_octal(void); 
+int     print_octal(int); // OK 
 int     print_hex(void); 
 int     print_pointer(void); 
 
 int     main(void)
 {
-    int i = print_float(-42.24);
+    int i = print_octal(42);
     printf("\n");
-    int l = print_float(-42);
-    printf("\ni: %d - l: %d\n", i, l);
-    return (1);
+    // int l = print_octal(4242);
+    // printf("\ni: %d - l: %d\n", i, l);
+    printf("i: %d\n", i);
+    return (0);
 }
 
 int     print_int(int n)
@@ -42,6 +43,11 @@ int     print_str(const char *str)
     int     len;
 
     len = ft_strlen(str);
+    if ((len == 0) || (!str))
+    {
+        ft_putstr("(null)");
+        return (6);
+    }
     ft_putstr(str);
     return (len);
 }
@@ -54,8 +60,7 @@ int     print_float(float f)
     int     len;
     int     p_int;
     int     p_dec;
-    
-    // printf("f: %.2f\n", f);
+
     len = 0;
     if (f < 0)
     {
@@ -70,6 +75,16 @@ int     print_float(float f)
     ft_putchar('.');
     len++;
     len += print_converted_n(p_dec, 10);
+    return (len);
+}
+
+int     print_octal(int n)
+{
+    int     len;
+
+    len = 0;
+    ft_putstr("0o");
+    len += (2 + print_converted_n(n, 8));
     return (len);
 }
 
