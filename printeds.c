@@ -4,31 +4,31 @@
 #include "libft.h"
 
 
-void    ft_putstr(const char *str);
-void	ft_putchar(char c);
+void    ft_putstr(const char*);
+void	ft_putchar(char);
 
-int     count_digits_in_base(int nbr, int base);
-int     convert(int nbr, int base);
-int     print_int(int n);  // OK
-int     print_char(char c); // OK
-int     print_str(const char *str); // OK 
-int     print_float(float n); 
+int     count_digits_in_base(int, int);
+int     print_converted_n(int, int);
+int     print_int(int);  // OK
+int     print_char(char); // OK
+int     print_str(const char*); // OK 
+int     print_float(float); // OK 
 int     print_octal(void); 
 int     print_hex(void); 
 int     print_pointer(void); 
 
 int     main(void)
 {
-    int i = print_str("ABC");
+    int i = print_float(-42.24);
     printf("\n");
-    int l = print_str("Plinio");
+    int l = print_float(-42);
     printf("\ni: %d - l: %d\n", i, l);
     return (1);
 }
 
 int     print_int(int n)
 {
-    return convert(n, 10);
+    return print_converted_n(n, 10);
 }
 
 int     print_char(char c)
@@ -46,7 +46,34 @@ int     print_str(const char *str)
     return (len);
 }
 
-int     convert(int nbr, int base)
+// Handle only float numbers with numbers which has two precision numbers
+// This function is POV 
+int     print_float(float f)
+{
+    int     aux;
+    int     len;
+    int     p_int;
+    int     p_dec;
+    
+    // printf("f: %.2f\n", f);
+    len = 0;
+    if (f < 0)
+    {
+        f *= (-1);
+        ft_putchar('-');
+        len++;
+    }
+    aux = (int)(f * 100);
+    p_int = (aux - ((aux % 100))) / 100;
+    p_dec = aux % 100;
+    len += print_converted_n(p_int, 10);
+    ft_putchar('.');
+    len++;
+    len += print_converted_n(p_dec, 10);
+    return (len);
+}
+
+int     print_converted_n(int nbr, int base)
 {
     static char     digits[] = "0123456789ABCDEF";
     char            *converted;
@@ -99,17 +126,11 @@ int     count_digits_in_base(int nbr, int base)
 
 void	ft_putchar(char c)
 {
-	int	fd;
-
-	fd = 1;
-	write(fd, &c, 1);
+	write(1, &c, 1);
 }
 
 void    ft_putstr(const char *str)
 {
-    // char    *letter;
-
-    // letter = str;
     while (*str != '\0') 
     {
         write(1, str, 1);
