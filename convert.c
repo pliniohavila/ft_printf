@@ -18,7 +18,7 @@ int     count_digits_in_base(int nbr, int base)
     return (count);
 }
 
-int     convert_base_str(int nbr, int base)
+int     convert(int nbr, int base)
 {
     static char     digits[] = "0123456789abcdef0123456789ABCDEF";
     char            *converted;
@@ -47,21 +47,21 @@ int     convert_base_str(int nbr, int base)
         converted[len--] = digits[(nbr % base)];
         nbr /= base;
     }
-    printf(converted);
+    printf("%s", converted);
     free(converted);
     return (r);
 }
 
 int main()
 {
-    printf(" -> [0]d: %d\n", convert_base_str(0, 10));
-    printf(" -> [42]d: %d\n", convert_base_str(42, 10));
-    printf(" -> [-42]h: %d\n", convert_base_str(-42, 10));
-    printf(" -> [145]h: %d\n", convert_base_str(145, 16));
-    printf(" -> [145]h: %d\n", convert_base_str(145, 16));
-    printf(" -> [1]h: %d\n", convert_base_str(1, 16));
-    printf(" -> [42]o: %d\n", convert_base_str(42, 8));
-    printf(" -> [4]o: %d\n", convert_base_str(4, 8));
+    printf(" -> [0]d: %d\n", convert(0, 10));
+    printf(" -> [42]d: %d\n", convert(42, 10));
+    printf(" -> [-42]d: %d\n", convert(-42, 10));
+    printf(" -> [42]h: %d\n", convert(42, 16));
+    // printf(" -> [145]h: %d\n", convert(145, 16));
+    printf(" -> [1]h: %d\n", convert(1, 16));
+    printf(" -> [42]o: %d\n", convert(42, 8));
+    printf(" -> [4]o: %d\n", convert(4, 8));
 
     return 0;
 }
