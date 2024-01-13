@@ -2,13 +2,8 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <unistd.h>
+#include "ft_printf.h"
 
-typedef int     (*fptr) (void);
-typedef struct  spec_opt
-{
-    char        spec;
-    fptr        spec_func;
-}               SPEC_OPT;
 
 int     ft_printf(const char *fmt, ...);
 void    ft_putstr(char *str);
@@ -31,29 +26,6 @@ int     main(void)
     ft_printf("Ola char: %c int: %d te float: %f string: %s pointer: %p\n");
     ft_printf("Ola char: %c%d te float: %fstring: %s pointer: %p\n");
     return (1);
-}
-
-void	ft_putchar(char c)
-{
-	int	fd;
-
-	fd = 1;
-	write(fd, &c, 1);
-}
-
-void    ft_putstr(char *str)
-{
-    char    *letter;
-    int     space;
-
-    letter = str;
-    space = 32;
-    while (*letter != '\0') 
-    {
-        write(1, letter, 1);
-        // write(1, &space, 1);
-        letter++;
-    }
 }
 
 // handle with %d, %c, %s, %f, %o, %x, %p
@@ -119,44 +91,143 @@ fptr    get_spec_func(char spec)
     return (NULL);
 }
 
-int     print_int(void)
+
+int     print_int(int n)
 {
-    ft_putstr("[int specifier]");
+    return print_converted_n(n, 10);
+}
+
+int     print_char(char c)
+{
+    ft_putchar(c);
     return (1);
 }
 
-int     print_char(void)
+int     print_str(const char *str)
 {
-    ft_putstr("[char specifier]");
-    return (1);
+    int     len;
+
+    len = ft_strlen(str);
+    if ((len == 0) || (!str))
+    {
+        ft_putstr("(null)");
+        return (6);
+    }
+    ft_putstr(str);
+    return (len);
 }
 
-int     print_str(void)
+// Handle only float numbers with numbers which has two precision numbers
+// This function is POV 
+int     print_float(float f)
 {
-    ft_putstr("[string specifier]");
-    return (1);
+    int     aux;
+    int     len;
+    int     p_int;
+    int     p_dec;
+
+    len = 0;
+    if (f < 0)
+    {
+        f *= (-1);
+        ft_putchar('-');
+        len++;
+    }
+    aux = (int)(f * 100);
+    p_int = (aux - ((aux % 100))) / 100;
+    p_dec = aux % 100;
+    len += print_converted_n(p_int, 10);
+    ft_putchar('.');
+    len++;
+    len += print_converted_n(p_dec, 10);
+    return (len);
 }
 
-int     print_float(void)
+int     print_octal(int n)
 {
-    ft_putstr("[float specifier]");
-    return (1);
+    int     len;
+
+    len = 0;
+    ft_putstr("0o");
+    len += (2 + print_converted_n(n, 8));
+    return (len);
 }
 
-int     print_octal(void)
+int     print_hex(int n)
 {
-    ft_putstr("[octal specifier]");
-    return (1);
+    int     len;
+
+    len = 0;
+    ft_putstr("0x");
+    len += (2 + print_converted_n(n, 16));
+    return (len);
 }
 
-int     print_hex(void)
+int     print_pointer(void *address_pointer)
 {
-    ft_putstr("[hex specifier]");
-    return (1);
+    uintptr_t   address_int;
+    char        address[16];
+    int         i;
+
+    address_int = (uintptr_t)address_pointer;
+    i = 0;
+    while (i++ < 16) 
+    {
+        address[15 - i] = "0123456789abcdef"[address_int & 0xf];
+        address_int >>= 4;
+    }
+    ft_putstr("0x");
+    ft_putstr(address);
+    return (18);
 }
 
-int     print_pointer(void)
+int     print_converted_n(int nbr, int base)
 {
-    ft_putstr("[pointer specifier]");
-    return (1);
+    static char     digits[] = "0123456789ABCDEF";
+    char            *converted;
+    int             len;
+    int             r;
+
+    len = count_digits_in_base(nbr, base) + 1;
+    converted = (char*)malloc(sizeof(char) * len + 1); 
+    if (!converted)
+        return (-1);
+    if (nbr < 0) 
+    {
+        converted[0] = '-';
+        nbr *= (-1);
+    }
+    else 
+    {
+        len--;
+    }
+    r = len;
+    converted[len--] = '\0';
+    if (nbr == 0)
+        converted[len--] = '0';
+    while (nbr != 0)
+    {
+        converted[len--] = digits[(nbr % base)];
+        nbr /= base;
+    }
+    ft_putstr(converted);
+    free(converted);
+    return (r);
+}
+
+int     count_digits_in_base(int nbr, int base)
+{
+    int     count;
+
+    count = 0;
+    if (nbr == 0)
+        return ++count;
+    if (nbr < 0)
+        nbr *= (-1);
+    while (nbr != 0)
+    {
+        count++;
+        nbr /= base;
+    }
+    return (count);
 }

@@ -1,23 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "libft.h"
-
 #include <stdint.h>
-
-
-void    ft_putstr(const char*);
-void	ft_putchar(char);
-
-int     count_digits_in_base(int, int);
-int     print_converted_n(int, int);
-int     print_int(int);  // OK
-int     print_char(char); // OK
-int     print_str(const char*); // OK 
-int     print_float(float); // OK 
-int     print_octal(int); // OK 
-int     print_hex(int); // OK 
-int     print_pointer(void*); //OK
+#include "libft.h"
 
 int     main(void)
 {
@@ -174,18 +159,4 @@ int     count_digits_in_base(int nbr, int base)
         nbr /= base;
     }
     return (count);
-}
-
-void	ft_putchar(char c)
-{
-	write(1, &c, 1);
-}
-
-void    ft_putstr(const char *str)
-{
-    while (*str != '\0') 
-    {
-        write(1, str, 1);
-        str++;
-    }
 }
