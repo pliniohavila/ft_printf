@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include "libft.h"
 
+#include <stdint.h>
+
 
 void    ft_putstr(const char*);
 void	ft_putchar(char);
@@ -14,16 +16,23 @@ int     print_char(char); // OK
 int     print_str(const char*); // OK 
 int     print_float(float); // OK 
 int     print_octal(int); // OK 
-int     print_hex(void); 
-int     print_pointer(void); 
+int     print_hex(int); // OK 
+int     print_pointer(void*); //OK
 
 int     main(void)
 {
-    int i = print_octal(42);
+    int i = print_hex(42);
     printf("\n");
-    // int l = print_octal(4242);
-    // printf("\ni: %d - l: %d\n", i, l);
-    printf("i: %d\n", i);
+    int l = print_hex(4242);
+    printf("\ni: %d - l: %d\n", i, l);
+    char    *s = "Havila";
+    // 0x55df779e4020
+    printf("s_p: %p \n", s);
+    printf("print_pointer:\n");
+    print_pointer(s);
+    printf("\n");
+    // printf("C> %c\n", "0123456789abcdef"[42 & 0xf]);
+    // printf("i: %d\n", i);
     return (0);
 }
 
@@ -86,6 +95,34 @@ int     print_octal(int n)
     ft_putstr("0o");
     len += (2 + print_converted_n(n, 8));
     return (len);
+}
+
+int     print_hex(int n)
+{
+    int     len;
+
+    len = 0;
+    ft_putstr("0x");
+    len += (2 + print_converted_n(n, 16));
+    return (len);
+}
+
+int     print_pointer(void *address_pointer)
+{
+    uintptr_t   address_int;
+    char        address[16];
+    int         i;
+
+    address_int = (uintptr_t)address_pointer;
+    i = 0;
+    while (i++ < 16) 
+    {
+        address[15 - i] = "0123456789abcdef"[address_int & 0xf];
+        address_int >>= 4;
+    }
+    ft_putstr("0x");
+    ft_putstr(address);
+    return (18);
 }
 
 int     print_converted_n(int nbr, int base)
