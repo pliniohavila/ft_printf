@@ -1,39 +1,65 @@
-# A homemade version of the `printf` function 
+# Um versão artesanal da função `printf`
 
 
+Venho estudado um a linguagem C ultimamente e suas funções básicas que todo programador utiliza no dia a dia. 
 
-# Study Road
-- [x] Review  https://medium.com/@HackerSa3edy/printf-the-art-of-crafting-a-custom-function-in-c-programming-a3e3ec06bdb8
-- [x] Study  Actual `printf` function code
-- [x] Study  https://github.com/Tahani-Saber/printf
-- [X] Study  https://stackoverflow.com/questions/1735236/how-to-write-my-own-printf-in-c
-- [X] Study  https://scientyficworld.org/how-to-write-my-own-printf-in-c/
-- [ ] Study  https://www.lix.polytechnique.fr/~liberti/public/computing/prog/c/C/FUNCTIONS/format.html
-- [ ] Study  https://github.com/hackerSa3edy/simple_shell
-- [ ] Study  https://github.com/appinha/42cursus-01-ft_printf
-- [ ] Study the `get_op_func` in https://github.com/Tahani-Saber/printf/blob/master/_printf.c
-- [ ] https://delicious-caraway-75c.notion.site/printf-project-d4808647995045d7ad0c9716e0b287be
+Nesse sentido, resolvi entender e implementar um versão simplória da função `printf`. É bem simples, apenas para se ter uma noção de como é a sua implementação. Bem como, observar uma implementação prática dos macros `va_arg, va_copy, va_end, va_start`, que ja escrevi a respeito neste [texto](https://pliniohavila.hashnode.dev/introducao-aos-macros-vastart-vaarg-vaend-vacopy-na-linguagem-c). 
 
+Também, como estudar sobre _dispatch tables_ recentemente, resolvi implementar no código da minha implementação.
+Escrevi a respeito delas neste [texto](https://pliniohavila.hashnode.dev/estudos-de-c-breves-notas-sobre-dispatch-tables). 
 
-# Prev
-- [X] Study and write about hash tables in C language
-- [X] Study and write about table dispatch in C language
-- [X] Undestand va_arg, va_copy, va_end, va_start macros: maybe write about it 
+Não vou entrar em detalhes sobre o funcionamento da função, `printf`. Mas basicamente, a função funciona da seguinte forma. 
 
-# Implementation road
+Caso queira, tem a as seguintes referências para a compreensão desta função:
 
- - [ ] Parsing string, check quantity format specifiers and data
- - [ ] Handling Edge Cases
- - [ ] Handling Format Specifiers
- - [ ] Handling flags
- - [ ] Printing the string and clean up
+1. https://www.academia.edu/10297206/Secrets_of_printf
+2. https://www.lix.polytechnique.fr/~liberti/public/computing/prog/c/C/FUNCTIONS/format.html
+3. https://pt.wikipedia.org/wiki/Printf#:~:text=printf%20(print%20formatted)%20é%20um,comparação%20aos%20programas%20em%20C.
+4. https://en.wikipedia.org/wiki/Printf
 
+Ela tem recebe como primeiro argumento uma `string` de formatação, que é obrigatória, seguida, ou não, por uma lista de argumentos referentes aos dados que serão utilizado na construção da `string` que será impressa na tela. 
 
-# References
+Por meio dela, é definido como a `string` final será impressa na tela, preenchida com os dados informados nos argumentos subsequentes. 
 
-- https://medium.com/@HackerSa3edy/printf-the-art-of-crafting-a-custom-function-in-c-programming-a3e3ec06bdb8
-- https://www.academia.edu/10297206/Secrets_of_printf_
-- https://github.com/Tahani-Saber/printf
-- https://opensource.apple.com/source/xnu/xnu-201/osfmk/kern/printf.c.auto.html
-- https://delicious-caraway-75c.notion.site/printf-project-d4808647995045d7ad0c9716e0b287be
-- https://opensource.apple.com/source/xnu/xnu-201/osfmk/kern/printf.c.auto.html
+A construção dessa `string` se dá mediante utilização de especificadores de formatos presentes na `string` de formatação. Há também `flags`, que adiciona detalhes na formatação final. 
+
+Esses especificadores define quais dados devem ser inseridos naquele local. São exemplos:
+
+- `%d` para inteiros
+- `%f` para para números decimais
+- `%c` para para caracteres
+- `%s` para `strings`
+
+Uma observação. Podemos utilizar a função `printf` para imprimir apenas um `string` literal:
+```c
+printf("Hello, world!\n");
+```
+
+Uma vez chamada a função com os argumentos, iniciar-se-á a construção da `string` formatada. 
+
+Essa atividade de dá da seguinte forma. 
+
+A `string` de formatação é percorrida, uma vez encontrada um especificador de formato, faz-se uso dos macros `va_arg, va_copy, va_end, va_start` para acessar os dados do argumento respectivo, seguindo a ordem em que foram informados. 
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Printf.svg/1920px-Printf.svg.png)
+
+Em resumo rápido, assim é o funcionamento da função `printf`.
+
+## Implementação 
+
+O artigo será estruturado da seguinte forma 
+
+[Apresentar os tipos e os protótipos das funções]
+
+[explicar cada função]
+
+[mostrar o código completo]
+
+# Repositório 
+
+https://github.com/pliniohavila/ft_printf 
+
+# Referências
+
+- https://pliniohavila.hashnode.dev/introducao-aos-macros-vastart-vaarg-vaend-vacopy-na-linguagem-c
+- https://pliniohavila.hashnode.dev/estudos-de-c-breves-notas-sobre-dispatch-tables
