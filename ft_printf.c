@@ -4,41 +4,41 @@
 #include <stdint.h>
 #include <unistd.h>
 #include "ft_printf.h"
-#include "ft_printf.c"
+#include "libft.h"
 
-
-// int     ft_printf(const char *fmt, ...);
-// fptr    get_spec_func(char spec);
-// int     print_int(void); 
-// int     print_char(void); 
-// int     print_str(void); 
-// int     print_float(void); 
-// int     print_octal(void); 
-// int     print_hex(void); 
-// int     print_pointer(void); 
 
 int     main(void)
 {
-    // char    *str;
+    char    *str;
+    int     len;
+    double  d;
+    int     i;
+    int     l;
 
-    // str = "Hello world!\n";
-    // ft_printf(str);
-    ft_printf("Ola char: %c int: %d te float: %f string: %s pointer: %p\n");
-    ft_printf("Ola char: %c%d te float: %fstring: %s pointer: %p\n");
-    return (1);
+    str = "Hello world!";
+    len = (int)ft_strlen(str);
+    i = printf("PRINTF> STR: %s - CHAR: %c - LEN: %d - PTR: %p\n",  str, str[0], len, str);
+    l = ft_printf("FT_PRINTF> STR: %s - CHAR: %c - LEN: %d - PTR: %p\n",  str, str[0], len, str);
+    printf("i: %d - l: %d\n\n", i, l);
+    d = 42.42;
+    i = printf("PRINTF> D+: %.2f - D-: %.2f\n", d, -d);
+    l = ft_printf("FT_PRINTF> D+: %f - D-: %f\n", d, -d);
+    printf("i: %d - l: %d\n\n", i, l);
+    return (0);
 }
 
-// handle with %d, %c, %s, %f, %o, %x, %p
 int     ft_printf(const char *fmt, ...)
 {
     int     i;
     int     count_printed;
     fptr    print_func;
+    va_list argptr;
 
     i = 0; 
     count_printed = 0;
     if (fmt == NULL && (fmt[i] == '%' && fmt[i+1] == '\0'))
         return (-1);
+    va_start(argptr, fmt);
     while (fmt[i] != '\0')
     {
         print_func = NULL;
@@ -52,9 +52,9 @@ int     ft_printf(const char *fmt, ...)
             else 
             {
                 print_func = get_spec_func(fmt[i + 1]);
-                print_func();
                 if (!print_func)
                     return (-1);
+                count_printed += print_func(argptr);
                 i++; 
             }
         }
@@ -65,6 +65,7 @@ int     ft_printf(const char *fmt, ...)
         i++;
         count_printed++;
     }
+    va_end(argptr);
     return (count_printed);
 }
 
@@ -92,142 +93,158 @@ fptr    get_spec_func(char spec)
 }
 
 
-// int     print_int(int n)
-// {
-//     return print_converted_n(n, 10);
-// }
+int     print_int(va_list argptr)
+{
+    int     n;
 
-// int     print_char(char c)
-// {
-//     ft_putchar(c);
-//     return (1);
-// }
+    n = va_arg(argptr, int);
+    return print_converted_n(n, 10);
+}
 
-// int     print_str(const char *str)
-// {
-//     int     len;
+int     print_char(va_list argptr)
+{
+    char    c;
 
-//     len = ft_strlen(str);
-//     if ((len == 0) || (!str))
-//     {
-//         ft_putstr("(null)");
-//         return (6);
-//     }
-//     ft_putstr(str);
-//     return (len);
-// }
+    c = (char)va_arg(argptr, int);
+    ft_putchar(c);
+    return (1);
+}
+
+int     print_str(va_list argptr)
+{
+    int     len;
+    char    *str;
+
+    str = va_arg(argptr, char*);
+    len = ft_strlen(str);
+    if ((len == 0) || (!str))
+    {
+        ft_putstr("(null)");
+        return (6);
+    }
+    ft_putstr(str);
+    return (len);
+}
 
 // // Handle only float numbers with numbers which has two precision numbers
 // // This function is POV 
-// int     print_float(float f)
-// {
-//     int     aux;
-//     int     len;
-//     int     p_int;
-//     int     p_dec;
+int     print_float(va_list argptr)
+{
+    int     aux;
+    int     len;
+    int     p_int;
+    int     p_dec;
+    double  f;
 
-//     len = 0;
-//     if (f < 0)
-//     {
-//         f *= (-1);
-//         ft_putchar('-');
-//         len++;
-//     }
-//     aux = (int)(f * 100);
-//     p_int = (aux - ((aux % 100))) / 100;
-//     p_dec = aux % 100;
-//     len += print_converted_n(p_int, 10);
-//     ft_putchar('.');
-//     len++;
-//     len += print_converted_n(p_dec, 10);
-//     return (len);
-// }
+    f = va_arg(argptr, double);
+    len = 0;
+    if (f < 0)
+    {
+        f *= (-1);
+        ft_putchar('-');
+        len++;
+    }
+    aux = (int)(f * 100);
+    p_int = (aux - ((aux % 100))) / 100;
+    p_dec = aux % 100;
+    len += print_converted_n(p_int, 10);
+    ft_putchar('.');
+    len++;
+    len += print_converted_n(p_dec, 10);
+    return (len);
+}
 
-// int     print_octal(int n)
-// {
-//     int     len;
+int     print_octal(va_list argptr)
+{
+    int     n;
+    int     len;
 
-//     len = 0;
-//     ft_putstr("0o");
-//     len += (2 + print_converted_n(n, 8));
-//     return (len);
-// }
+    n = va_arg(argptr, int);
+    len = 0;
+    ft_putstr("0o");
+    len += (2 + print_converted_n(n, 8));
+    return (len);
+}
 
-// int     print_hex(int n)
-// {
-//     int     len;
+int     print_hex(va_list argptr)
+{
+    int     n;
+    int     len;
 
-//     len = 0;
-//     ft_putstr("0x");
-//     len += (2 + print_converted_n(n, 16));
-//     return (len);
-// }
+    n = va_arg(argptr, int);
+    len = 0;
+    ft_putstr("0x");
+    len += (2 + print_converted_n(n, 16));
+    return (len);
+}
 
-// int     print_pointer(void *address_pointer)
-// {
-//     uintptr_t   address_int;
-//     char        address[16];
-//     int         i;
+int     print_pointer(va_list argptr)
+{
+    uintptr_t   pointer_int;
+    char        address[16];
+    int         i;
+    void        *pointer;
 
-//     address_int = (uintptr_t)address_pointer;
-//     i = 0;
-//     while (i++ < 16) 
-//     {
-//         address[15 - i] = "0123456789abcdef"[address_int & 0xf];
-//         address_int >>= 4;
-//     }
-//     ft_putstr("0x");
-//     ft_putstr(address);
-//     return (18);
-// }
+    pointer = va_arg(argptr, void*);
+    pointer_int = (uintptr_t)pointer;
+    i = 0;
+    while (i++ < 16) 
+    {
+        address[15 - i] = "0123456789abcdef"[pointer_int & 0xf];
+        pointer_int >>= 4;
+    }
+    ft_putstr("0x");
+    ft_putstr(address);
+    return (18);
+}
 
-// int     print_converted_n(int nbr, int base)
-// {
-//     static char     digits[] = "0123456789ABCDEF";
-//     char            *converted;
-//     int             len;
-//     int             r;
+int     print_converted_n(int nbr, int base)
+{
+    static char     digits[] = "0123456789ABCDEF";
+    char            *converted;
+    int             len;
+    int             r;
 
-//     len = count_digits_in_base(nbr, base) + 1;
-//     converted = (char*)malloc(sizeof(char) * len + 1); 
-//     if (!converted)
-//         return (-1);
-//     if (nbr < 0) 
-//     {
-//         converted[0] = '-';
-//         nbr *= (-1);
-//     }
-//     else 
-//     {
-//         len--;
-//     }
-//     r = len;
-//     converted[len--] = '\0';
-//     if (nbr == 0)
-//         converted[len--] = '0';
-//     while (nbr != 0)
-//     {
-//         converted[len--] = digits[(nbr % base)];
-//         nbr /= base;
-//     }
-//     ft_putstr(converted);
-//     free(converted);
-//     return (r);
-// }
+    len = count_digits_in_base(nbr, base) + 1;
+    converted = (char*)malloc(sizeof(char) * len + 1); 
+    if (!converted)
+        return (-1);
+    if (nbr < 0) 
+    {
+        converted[0] = '-';
+        nbr *= (-1);
+    }
+    else 
+    {
+        len--;
+    }
+    r = len;
+    converted[len--] = '\0';
+    if (nbr == 0)
+        converted[len--] = '0';
+    while (nbr != 0)
+    {
+        converted[len--] = digits[(nbr % base)];
+        nbr /= base;
+    }
+    ft_putstr(converted);
+    free(converted);
+    return (r);
+}
 
-// int     count_digits_in_base(int nbr, int base)
-// {
-//     int     count;
+int     count_digits_in_base(int nbr, int base)
+{
+    int     count;
 
-//     count = 0;
-//     if (nbr == 0)
-//         return ++count;
-//     if (nbr < 0)
-//         nbr *= (-1);
-//     while (nbr != 0)
-//     {
-//         count++;
-//         nbr /= base;
-//     }
-//     return (count);
-// }
+    count = 0;
+    if (nbr == 0)
+        return ++count;
+    if (nbr < 0)
+        nbr *= (-1);
+    while (nbr != 0)
+    {
+        count++;
+        nbr /= base;
+    }
+    return (count);
+}
