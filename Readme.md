@@ -1,9 +1,9 @@
-# Um versão artesanal da função `printf`
+# Uma versão artesanal da função `printf`
 
 
 Venho estudado a linguagem C ultimamente e suas funções básicas que todo programador utiliza no dia a dia. 
 
-De grosso modo, achei PDFS da Escola 42 no Github e venho praticando os exercícios propostos. 
+De grosso modo, achei alguns PDFS da Escola 42 no Github e venho praticando os exercícios propostos. 
 
 Nesse sentido, resolvi entender e implementar um versão simplória da função `printf`. É bem simples, apenas para se ter uma noção de como é a sua implementação. Bem como, observar uma implementação prática dos macros `va_arg, va_copy, va_end, va_start`, que ja escrevi a respeito neste [texto](https://pliniohavila.hashnode.dev/introducao-aos-macros-vastart-vaarg-vaend-vacopy-na-linguagem-c). 
 
@@ -12,7 +12,7 @@ Escrevi a respeito delas neste [texto](https://pliniohavila.hashnode.dev/estudos
 
 Não vou entrar em detalhes sobre o funcionamento da função, `printf`. Mas basicamente, a função funciona da seguinte forma. 
 
-Ela tem recebe como primeiro argumento uma `string` de formatação, que é obrigatória, seguida, ou não, por uma lista de argumentos referentes aos dados que serão utilizado na construção da `string` que será impressa na tela. 
+Ela tem recebe como primeiro argumento uma `string` de formatação, que é obrigatória, seguida, ou não, por uma lista de argumentos referentes aos dados que serão utilizados na construção da `string` que será impressa na tela. 
 
 Por meio dela, é definido como a `string` final será impressa na tela, preenchida com os dados informados nos argumentos subsequentes. 
 
@@ -32,7 +32,7 @@ printf("Hello, world!\n");
 
 Uma vez chamada a função com os argumentos, iniciar-se-á a construção da `string` formatada. 
 
-Essa atividade de dá da seguinte forma. 
+Essa atividade se dá da seguinte forma. 
 
 A `string` de formatação é percorrida, uma vez encontrada um especificador de formato, faz-se uso dos macros `va_arg, va_copy, va_end, va_start` para acessar os dados do argumento respectivo, seguindo a ordem em que foram informados. 
 
@@ -55,7 +55,7 @@ Dois novos tipos são definidos: `fptr` e `spec_opt`. O primeiro, trata-se de um
 
 Estes tipos são necessários para a implementação da _dispatch table_, a qual será explicada linhas abaixo. 
 
-Temos a função `ft_printf` e suas funções auxiliares: `get_spec_func` e `count_digits_in_base`. Por vim, as funções responsáveis por imprimir os valores a depender do seu tipo. 
+Temos a função `ft_printf` e suas funções auxiliares: `get_spec_func` e `count_digits_in_base`. Por fim, as funções responsáveis por imprimir os valores a depender do seu tipo. 
 
 ```c
 // file ft_printf.h
@@ -83,16 +83,16 @@ int     print_pointer(va_list);
 
 # Funções
 
-Segue abaixo, uma explicação sobre as funções escritas para a implementação desta minha simple versão da função `printf`. 
+Segue abaixo, uma explicação sobre as funções escritas para a implementação desta minha simples versão da função `printf`. 
 
 ### int ft_printf(const char *fmt, ...)
 
-Esta é função por imprimir a `string`, seja ela, literal ou a ser formatada com os valores informados. 
+Esta é função responsável por imprimir a `string`, seja ela, literal ou formatada com os valores informados. 
 
-Inicialmente, ela faz uma verificação da `string fmt`, caso ela não seja nula, incia-se um _loop_ para a impressão do conteúdo da `string`, bem como a inserção e impressão dos valores dos argumentos, a depender dos especificadores  de formato. 
+Inicialmente, ela faz uma verificação da `string fmt`, caso ela não seja nula, incia-se um _loop_ para a impressão do conteúdo da `string`, bem como a inserção e impressão dos valores dos argumentos, a depender dos especificadores de formato. 
 Caso, encontre o caractere `%`, o fluxo de execução passa para dentro de contexto da condicional. Há outra condicional que verifica se o próximo caractere é um `%`, caso for, imprime-o e segue o fluxo do _loop_ para o próximo elemento da `string fmt`. 
-Agora, caso o elemento subsequente ao `%` não for, também, um `%`, o fluxo, segue para o próximo contexto alternativo: _else_. 
-Nesse, é realizada uma chamada à função `get_spec_func()`, passando o caractere subsequente ao `%`, que nesse caso é especificador de formato. Com base nele, a função retorna um ponteiro para função responsável por imprimir dados do tipo relativo ao especificador, ou nulo, caso não haja uma função para o especificador informado. 
+Agora, caso o elemento subsequente ao `%` não for um `%`, o fluxo, segue para o próximo contexto alternativo: _else_. 
+Neste, é realizada uma chamada à função `get_spec_func()`, passando o caractere subsequente ao `%`, que nesse caso é especificador de formato. Com base nele, a função retorna um ponteiro para função responsável por imprimir dados do tipo relativo ao especificador, ou nulo, caso não haja uma função para o especificador informado. 
 
 Se for caso de um retorno nulo da função `get_spec_func`, a execução da aplicação é interrompida e `-1` é retornado.
 
@@ -147,10 +147,10 @@ int     ft_printf(const char *fmt, ...)
 ### fptr get_spec_func(char spec)
 
 Esta função é responsável por retornar um ponteiro para uma função relativa ao especificado de conteúdo informado.
-Temos aqui a implementação de uma _dispatch table_, que retorna ponteiros de funções.
+Temos aqui a implementação de uma _dispatch table_, que retorna um ponteiro  para a função de impressão desejada.
 Sua implementação é simples. Temos um vetor composto de estruturas `SPEC_OPT`, cujo cada elemento de cada estrutura é um caractere o ponteiro para a sua função respectiva.
 
-Após, temos um _loop_ responsável procurar o ponteiro da função desejada, ou retornar `NULL`, caso não encontre.
+Por fim, temos um _loop_ responsável procurar o ponteiro da função desejada, ou retornar `NULL`, caso não o encontre.
 
 ```c
 fptr    get_spec_func(char spec)
@@ -202,7 +202,7 @@ int     count_digits_in_base(int nbr, int base)
 
 ### Funções de impressão
 
-Estas função são responsáveis por imprimir, em formato de `string`, o conteúdo dos argumentos informados. São implementações simples, mais como prova de conceito mesmo, a exemplo, são as funções `print_hex()` e `print_float`. 
+Estas funções são responsáveis por imprimir, em formato de `string`, o conteúdo dos argumentos informados. São implementações simples, mais como prova de conceito mesmo, a exemplo, são as funções `print_hex()` e `print_float`. 
 
 Recebem como argumento um ponteiro `va_list`, de onde recuperam os respectivos valores.
 
